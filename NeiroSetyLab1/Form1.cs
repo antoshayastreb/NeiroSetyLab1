@@ -37,6 +37,7 @@ namespace NeiroSetyLab1
         {
             int X = pictureBox1.Width / 10;
             int Y = pictureBox1.Height / 10;
+            int [] k = new int[20];
 
             sm.T = Convert.ToInt32(textBox1.Text);
             pictureBox1.Image = (Image)new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -59,6 +60,7 @@ namespace NeiroSetyLab1
                     if (sm.klaster[j] - 1 == i)
                     {
                         g.DrawEllipse(p, sm.xx[j] * X - 1, sm.xy[j] * Y - 1, 3, 3);
+                        k[i]++;
                     }
                 }
     
@@ -67,7 +69,7 @@ namespace NeiroSetyLab1
             listBox1.Items.Clear();
             for (int i = 0; i< sm.zi; i++)
             {
-                listBox1.Items.Add("Центр" + (i+1) +" = "+ sm.zx[i]+ ';' + sm.zy[i]);
+                listBox1.Items.Add("Центр" + (i+1) +" = "+ sm.zx[i]+ ';' + sm.zy[i] + " точек: " + k[i]);
             }
 
         }

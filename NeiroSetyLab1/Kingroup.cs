@@ -9,15 +9,16 @@ namespace NeiroSetyLab1
     class Kingroup
     {
         static int n = 10;
-        static int k = 3;
+        
+
         public int stop = 0;
-        public int[] xx = new int[] { 8, 5, 1, 9, 6, 7, 6, 4, 6, 8 };
-        public int[] xy = new int[] { 9, 5, 1, 1, 6, 6, 8, 7, 7, 1 };
-        public int[] zx = new int[k];
-        public int[] zy = new int[k];
-        public int[] zx1 = new int[k];
-        public int[] zy1 = new int[k];
-        public int[] klasteri = new int[n];
+        public int[] xx;
+        public int[] xy;
+        public int[] zx1;
+        public int[] zx;
+        public int[] zy;
+        public int[] zy1;
+        public int[] klaster = new int[n];
         public double d1 = 0.0;
         public double d2 = 0.0;
         public double mind = 100.0;
@@ -32,14 +33,28 @@ namespace NeiroSetyLab1
             return Math.Sqrt(Math.Pow(a - b, 2) + Math.Pow(c - d, 2));
         }
 
+        public int k { get; set; }
+
         public void compute()
         {
+            this.zx = new int[k];
+            this.zy = new int[k];
+            this.zx1 = new int[k];
+            this.zy1 = new int[k];
+            this.xx = new int[n];
+            this.xy = new int[n];
+
+            Random rnd = new Random();
+            for (int i=0; i<n; i++)
+            {
+                xx[i] = rnd.Next(10);
+                xy[i] = rnd.Next(10);
+            }
 
             for (int i = 0; i < n; i++)
             {
-                klasteri[i] = 0;
+                klaster[i] = 0;
             }
-
             for (int i = 0; i < k; i++)
             {
                 zx[i] = 0;
@@ -47,23 +62,31 @@ namespace NeiroSetyLab1
                 zx1[i] = 0;
                 zy1[i] = 0;
             }
-
             for (int iz = 0; iz < k; iz++)
             {
                 zx[iz] = xx[iz];
                 zy[iz] = xy[iz];
-                klasteri[iz] = iz + 1;
+                klaster[iz] = iz + 1;
             }
 
-            while ((c == 1) && (stop < 100))
+            int c = 0;
+            double mind = 0.0;
+            double d1 = 0.0;
+            int j = 0;
+            int sumx = 0;
+            int sumy = 0;
+            int kk = 0;
+            //алгоритм k-внутригрупповых средних
+            do
             {
                 c = 0;
+                //сохранение значений кластеров за тот шаг
                 for (int iz = 0; iz < k; iz++)
                 {
                     zx1[iz] = zx[iz];
                     zy1[iz] = zy[iz];
                 }
-
+                //распределение образов
                 for (int i = 0; i < n; i++)
                 {
                     for (int iz = 0; iz < k; iz++)
@@ -75,12 +98,10 @@ namespace NeiroSetyLab1
                             j = iz;
                         }
                     }
-                    klasteri[i] = j + 1;
+                    klaster[i] = j + 1;
                     mind = 100.0;
                 }
-
-
-
+                //пересчет координат центров
                 for (int iz = 0; iz < k; iz++)
                 {
                     sumx = 0;
@@ -88,7 +109,7 @@ namespace NeiroSetyLab1
                     kk = 0;
                     for (int i = 0; i < n; i++)
                     {
-                        if (klasteri[i] == (iz + 1))
+                        if (klaster[i] == (iz + 1))
                         {
                             sumx += xx[i];
                             sumy += xy[i];
@@ -105,20 +126,18 @@ namespace NeiroSetyLab1
                         zx[iz] = sumx;
                         zy[iz] = sumy;
                     }
-
-                    for (iz = 0; iz < k; iz++)
-                    {
-                        if ((zx1[iz] != zx[iz]) && (zy1[iz] != zy[iz]))
-                        {
-                            c = 1;
-                        }
-                    }
-
-
                 }
+                //проверка значений центров кластеров на предыдущем шаге и на этом
+                for (int iz = 0; iz < k; iz++)
+                {
+                    if ((zx1[iz] != zx[iz]) && (zy1[iz] != zy[iz]))
+                    {
+                        c = 1;
+                    }
+                }
+            } while (c == 1);
+            //конец цикла
 
-                stop++;
-            }
         }
     }
 }

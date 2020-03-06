@@ -90,7 +90,9 @@ namespace NeiroSetyLab1
         {
             listBox1.Items.Clear();
             Kingroup kg = new Kingroup();
+            kg.k = Convert.ToInt32(textBox2.Text);
             kg.compute();
+            int kop = 0;
             int X = pictureBox1.Width / 10;
             int Y = pictureBox1.Height / 10;
             pictureBox1.Image = (Image)new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -102,22 +104,28 @@ namespace NeiroSetyLab1
                 g.DrawLine(p, new Point(0, (pictureBox1.Height / 10 * (i + 1))), new Point(pictureBox1.Width, (pictureBox1.Height / 10 * (i + 1))));
             }
 
-            p.Color = Color.Black;
             p.Width = 8.0F;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < kg.k; i++)
             {
-                g.DrawEllipse(p, kg.xx[i] * X - 1, kg.xy[i] * Y - 1, 3, 3);
+                p.Color = colors[i];
+
+                for (int j = 0; j < 10; j++)
+                {
+                    if (kg.klaster[j]-1 == i)
+                    {
+                        g.DrawEllipse(p, kg.xx[j] * X - 1, kg.xy[j] * Y - 1, 3, 3);
+                        kop++;
+                    }
+                    
+                }
+
+                listBox1.Items.Add("Центр" + (i + 1) + " = " + kg.zx[i] + ';' + kg.zy[i] + " точек: " + kop);
+                kop = 0;
 
             }
 
-            p.Color = Color.Red;
-
-            for (int i = 0; i < 3; i++)
-            {
-                g.DrawEllipse(p, kg.zx[i] * X - 1, kg.zy[i] * Y - 1, 3, 3);
-                listBox1.Items.Add("Центр" + (i + 1) + " = " + kg.zx[i] + ';' + kg.zy[i]);
-            }
+            
 
         }
 

@@ -12,7 +12,7 @@ namespace NeiroSetyLab1
 {
     public partial class Form1 : Form
     {
-        smp sm = new smp();
+        
 
         Color[] colors = new Color[] {Color.Brown, Color.Crimson, Color.HotPink, Color.DarkOrange, Color.LimeGreen,
         Color.Red, Color.Green, Color.BurlyWood, Color.Ivory, Color.CadetBlue, Color.Khaki, Color.Fuchsia, Color.MediumBlue,
@@ -35,6 +35,8 @@ namespace NeiroSetyLab1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            smp sm = new smp();
+            sm.setRand();
             int X = pictureBox1.Width / 10;
             int Y = pictureBox1.Height / 10;
             int [] k = new int[20];
@@ -81,11 +83,16 @@ namespace NeiroSetyLab1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            sm.setRand();
+            
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            Kingroup kg = new Kingroup();
+            kg.compute();
             int X = pictureBox1.Width / 10;
             int Y = pictureBox1.Height / 10;
-
-
             pictureBox1.Image = (Image)new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Graphics g = Graphics.FromImage(pictureBox1.Image);
             Pen p = new Pen(Color.LightGreen);
@@ -98,17 +105,20 @@ namespace NeiroSetyLab1
             p.Color = Color.Black;
             p.Width = 8.0F;
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
-                g.DrawEllipse(p, sm.xx[i]*X-1, sm.xy[i]*Y-1, 3, 3);
+                g.DrawEllipse(p, kg.xx[i] * X - 1, kg.xy[i] * Y - 1, 3, 3);
 
             }
 
-            
+            p.Color = Color.Red;
+
+            for (int i = 0; i < 3; i++)
+            {
+                g.DrawEllipse(p, kg.zx[i] * X - 1, kg.zy[i] * Y - 1, 3, 3);
+                listBox1.Items.Add("Центр" + (i + 1) + " = " + kg.zx[i] + ';' + kg.zy[i]);
+            }
 
         }
-
-
-        
     }
 }
